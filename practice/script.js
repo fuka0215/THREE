@@ -7,7 +7,6 @@ import { Sky } from 'three/addons/objects/Sky.js';
  * Base
  */
 
-
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
@@ -16,8 +15,8 @@ const scene = new THREE.Scene()
 
 // 地平線をぼやけさせる
 scene.fog = new THREE.FogExp2( 0xffffff, 0.015 );
-// scene.background = new THREE.Color(0x87ceeb)
 
+// 空
 const sky = new Sky();
 sky.scale.setScalar( 450000 );
 scene.add( sky );
@@ -27,11 +26,12 @@ skyUniforms['turbidity'].value = 14; //空の霞み
 skyUniforms['rayleigh'].value = 0.5; //レイリー散乱
 
 const sun = new THREE.Vector3();
-const phi = THREE.MathUtils.degToRad(18);   // 高度
-const theta = THREE.MathUtils.degToRad(180); // 方角
+const phi = THREE.MathUtils.degToRad(18); // 高度
+const theta = THREE.MathUtils.degToRad(0); // 方角
 sun.setFromSphericalCoords(1, phi, theta);
 skyUniforms['sunPosition'].value.copy(sun);
 
+// x,y,zへの補助線
 const axesHelper = new THREE.AxesHelper()
 scene.add(axesHelper)
 
@@ -64,7 +64,6 @@ scene.add(cube)
 
 // マス目の床
 const svgString = encodeURIComponent(`<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-
   <!-- １．まず背景用の rect を最初に置く -->
   <rect width="100%" height="100%" fill="#f0f0f0" />
 
@@ -156,7 +155,7 @@ scene.add(camera)
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
-controls.maxPolarAngle = Math.PI / 2
+controls.maxPolarAngle = Math.PI / 2; //床下にカメラが行かないように
 controls.minDistance = 3;
 controls.maxDistance = 50;
 
@@ -174,10 +173,8 @@ renderer.setClearColor(scene.background)
 /**
  * Animate
  */
-
 const tick = () =>
 {
-
     // Update controls
     controls.update()
 
