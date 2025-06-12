@@ -6,6 +6,7 @@ import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js
 /**
  * Base
  */
+
 // Debug
 const gui = new GUI()
 
@@ -18,7 +19,8 @@ const scene = new THREE.Scene()
 /**
  * Lights
  */
-// ambientLightは全方向から均一に光が当たっている
+
+// ambientLightは全方向から均一に光が当たっている。このライトだけでは不十分なので他のライトと組み合わせて使うもの。
 // 最初のパラメーターはcolor(色)、2個目のパラメーターはintensity(強度)
 // const ambientLight = new THREE.AmbientLight(0xffffff, 1)
 // この書き方でも同じように動く materialのように。
@@ -41,8 +43,9 @@ const pointLight = new THREE.PointLight(0xff9000, 1.5, 10, 2)
 pointLight.position.set(1, - 0.5, 1)
 scene.add(pointLight)
 
-// 長方形のライト。引数の3番目はwidth, 4番目はheight。MeshStandardMaterialまたはMeshPhysicalMaterialでしか当たらないから気をつけて。MeshPhysicalを継承しているからMeshStandardMaterialも使えます。
-const rectAreaLight = new THREE.RectAreaLight(0x4e00ff, 6,1,1)
+// 長方形のライト。引数の3番目はwidth, 4番目はheight。
+// MeshStandardMaterialまたはMeshPhysicalMaterialでしか当たらないから気をつけて。MeshPhysicalを継承しているからMeshStandardMaterialも使えます。
+const rectAreaLight = new THREE.RectAreaLight(0x4e00ff, 6, 1, 1)
 rectAreaLight.position.set(-0.5, 0, 1.5)
 // 動かしてからlookAtを向かせる。何も引数に渡さなければ0,0,0を向く(中心)
 rectAreaLight.lookAt(new THREE.Vector3())
@@ -52,7 +55,7 @@ scene.add(rectAreaLight)
 // 色、
 // 強度、
 // distance(距離)、
-// angle(アングル、スポットライトの当たる幅。小さくなれば狭くなる。), 
+// angle(アングル、スポットライトの当たる幅。小さくなれば狭くなる。),
 // penumbra(ペナンブラ。端が暗くぼやける。0にするとはっきりとシャープなスポットライトになる。), 
 // decay(ディケイ。減衰。基本は弄らない。スポットライトの限界値)
 const spotLight = new THREE.SpotLight(0x78ff00, 4.5, 10, Math.PI * 0.1, 0.25, 1)
@@ -68,9 +71,6 @@ scene.add(spotLight.target)
 // 中くらいのコストならDirectionalLight, PointLight
 // ハイコストはSpotLight, RectAreaLight
 
-//右上で細かく調整できるように追加しているだけ。
-// gui.add(ambientLight, 'intensity').min(0).max(3).step(0.001)
-// gui.add(directionalLight, 'intensity').min(0).max(3).step(0.001)
 
 // Helpers
 // ライトは目に見えないのでヘルパーが存在しています。
@@ -96,9 +96,16 @@ const rectAreaLightHelper = new RectAreaLightHelper(rectAreaLight)
 scene.add(rectAreaLightHelper)
 
 
+
+
+// デバッグ用。右上で細かく調整できるように追加しているだけ。
+gui.add(ambientLight, 'intensity').min(0).max(3).step(0.001)
+gui.add(directionalLight, 'intensity').min(0).max(3).step(0.001)
+
+
 /**
  * Objects
- */
+*/
 // Material
 const material = new THREE.MeshStandardMaterial()
 material.roughness = 0.4
