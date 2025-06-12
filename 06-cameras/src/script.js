@@ -3,14 +3,14 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 /**
  * Cursor
  */
-const cursor = {
-    x: 0,
-    y: 0,
-}
-window.addEventListener('mousemove', (event) => {
-    cursor.x = event.clientX / sizes.width -0.5
-    cursor.y = - (event.clientY / sizes.height -0.5)
-})
+// const cursor = {
+//     x: 0,
+//     y: 0,
+// }
+// window.addEventListener('mousemove', (event) => {
+//     cursor.x = event.clientX / sizes.width -0.5
+//     cursor.y = - (event.clientY / sizes.height -0.5)
+// })
 
 /**
  * Base
@@ -92,5 +92,4 @@ const tick = () =>
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
 }
-
 tick()
