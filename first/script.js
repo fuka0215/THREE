@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js'
+import { Sky } from 'three/addons/objects/Sky.js';
 
 /**
  * Base
@@ -14,8 +15,22 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
 // 地平線をぼやけさせる
-scene.fog = new THREE.FogExp2( 0x87ceeb, 0.015 );
-scene.background = new THREE.Color(0x87ceeb)
+scene.fog = new THREE.FogExp2( 0xffffff, 0.015 );
+// scene.background = new THREE.Color(0x87ceeb)
+
+const sky = new Sky();
+sky.scale.setScalar( 450000 );
+scene.add( sky );
+
+const skyUniforms = sky.material.uniforms;
+skyUniforms['turbidity'].value = 14; //空の霞み
+skyUniforms['rayleigh'].value = 0.5; //レイリー散乱
+
+const sun = new THREE.Vector3();
+const phi = THREE.MathUtils.degToRad(18);   // 高度
+const theta = THREE.MathUtils.degToRad(180); // 方角
+sun.setFromSphericalCoords(1, phi, theta);
+skyUniforms['sunPosition'].value.copy(sun);
 
 const axesHelper = new THREE.AxesHelper()
 scene.add(axesHelper)
@@ -97,7 +112,7 @@ textureLoader.load(url,
     gridMaterial
 )
 plane.rotation.x = - Math.PI * 0.5
-plane.position.y = - 0.65
+plane.position.y = - 0.5
 scene.add(plane)
   },
   undefined,
