@@ -60,6 +60,7 @@ const cube = new THREE.Mesh(
     new THREE.BoxGeometry(0.75, 0.75, 0.75),
     material
 )
+cube.position.y = 0.25
 scene.add(cube)
 
 // マス目の床
@@ -104,15 +105,44 @@ textureLoader.load(url,
 
     const gridMaterial = new THREE.MeshBasicMaterial({
       map: texture,
-      side: THREE.DoubleSide,
+      side: THREE.FrontSide,
     })
-    const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(1000, 1000),
-    gridMaterial
-)
-plane.rotation.x = - Math.PI * 0.5
-plane.position.y = - 0.5
-scene.add(plane)
+
+//     const plane = new THREE.Mesh(
+//     new THREE.PlaneGeometry(1000, 1000),
+//     gridMaterial
+// )
+// plane.rotation.x = - Math.PI * 0.5
+// plane.position.y = - 0.5
+// scene.add(plane)
+
+const radius        = 500;
+        const widthSegs     = 64;
+        const heightSegs    = 64;
+        const phiStart      = 0;
+        const phiLength     = Math.PI * 2;
+        const thetaStart    = 0;
+        const thetaLength   = Math.PI / 2; // 上半分を切り落として「床」に
+
+        const sphereGeo = new THREE.SphereGeometry(
+          radius,
+          widthSegs,
+          heightSegs,
+          phiStart,
+          phiLength,
+          thetaStart,
+          thetaLength
+        );
+
+        const sphere = new THREE.Mesh(sphereGeo, gridMaterial);
+        // 上を向くように回転
+        sphere.rotation.x = Math.PI / 4;
+        // ちょうど y=0 を床面に合わせる
+        sphere.position.y = -radius;
+        // sphere.position.y = -1;
+
+        scene.add(sphere);
+
   },
   undefined,
   err => console.error("SVGテクスチャ読み込みエラー", err)
