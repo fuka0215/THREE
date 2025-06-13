@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js'
 import { Sky } from 'three/addons/objects/Sky.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 /**
  * Base
@@ -50,18 +51,7 @@ scene.add(directionalLight)
 /**
  * Objects
 */
-// Material
-const material = new THREE.MeshStandardMaterial()
-material.roughness = 0.4
-material.color = new THREE.Color(0xff0000)
 
-// Objects
-const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(0.75, 0.75, 0.75),
-    material
-)
-cube.position.y = 0.25
-scene.add(cube)
 
 // マス目の床
 const svgString = encodeURIComponent(`<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -108,46 +98,30 @@ textureLoader.load(url,
       side: THREE.FrontSide,
     })
 
-//     const plane = new THREE.Mesh(
-//     new THREE.PlaneGeometry(1000, 1000),
-//     gridMaterial
-// )
-// plane.rotation.x = - Math.PI * 0.5
-// plane.position.y = - 0.5
-// scene.add(plane)
-
-const radius        = 500;
-        const widthSegs     = 64;
-        const heightSegs    = 64;
-        const phiStart      = 0;
-        const phiLength     = Math.PI * 2;
-        const thetaStart    = 0;
-        const thetaLength   = Math.PI / 2; // 上半分を切り落として「床」に
-
-        const sphereGeo = new THREE.SphereGeometry(
-          radius,
-          widthSegs,
-          heightSegs,
-          phiStart,
-          phiLength,
-          thetaStart,
-          thetaLength
-        );
-
-        const sphere = new THREE.Mesh(sphereGeo, gridMaterial);
-        // 上を向くように回転
-        sphere.rotation.x = Math.PI / 4;
-        // ちょうど y=0 を床面に合わせる
-        sphere.position.y = -radius;
-        // sphere.position.y = -1;
-
-        scene.add(sphere);
+    const plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(1000, 1000),
+    gridMaterial
+)
+plane.rotation.x = - Math.PI * 0.5
+scene.add(plane)
 
   },
   undefined,
   err => console.error("SVGテクスチャ読み込みエラー", err)
 )
 
+// Material
+const material = new THREE.MeshStandardMaterial()
+material.roughness = 0.4
+material.color = new THREE.Color(0xff0000)
+
+// Objects
+const cube = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    material
+)
+cube.position.y = 0.75 / 2
+scene.add(cube)
 
 /**
  * Sizes
@@ -185,9 +159,9 @@ scene.add(camera)
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
-controls.maxPolarAngle = Math.PI / 2; //床下にカメラが行かないように
-controls.minDistance = 3;
-controls.maxDistance = 50;
+controls.maxPolarAngle = Math.PI / 2 -0.03; // 床下にカメラが行かないように
+controls.minDistance = 3; // ズームインした時の上限値
+controls.maxDistance = 50; // ズームアウトした時の上限
 
 /**
  * Renderer
@@ -197,7 +171,6 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-renderer.setClearColor(scene.background)
 
 
 /**
