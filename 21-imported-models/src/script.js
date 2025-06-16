@@ -53,42 +53,42 @@ gltfLoader.setDRACOLoader(dracoLoader)
 // )
 
 // ヘルメット
-// gltfLoader.load(
-//     '/models/FlightHelmet/glTF/FlightHelmet.gltf',
-//     (gltf) => {
-//         // 取得した配列の複製 中に入っているものを一つずつ選んで追加できることを知るためのコード。
-//     //    const children = [...gltf.scene.children]
-//     //    for(const child of children){
-//     //     scene.add(child)
-//     //    }
-//     // scene.add(gltf.scene)
-//     },)
+gltfLoader.load(
+    '/models/FlightHelmet/glTF/FlightHelmet.gltf',
+    (gltf) => {
+        // 取得した配列の複製 中に入っているものを一つずつ選んで追加できることを知るためのコード。
+    //    const children = [...gltf.scene.children]
+    //    for(const child of children){
+    //     scene.add(child)
+    //    }
+    // scene.add(gltf.scene)
+    },)
 
-    //Draco圧縮について。デフォルトファイルに比べて軽い。bufferデータ。
-//     // 複数のファイルを読み込む必要があるので、そもそも軽いデータではドラコローダーを使う必要はない。メガバイトの重たいデータであれば使ったほうが良い。
-//     // フリーズが起こる可能性。解凍する必要があるので重たいデータなら0.5秒ほどフリーズすることがあります。2秒ロードするのか0.5秒フリーズするのかどちらが良いかはその時による。
-// gltfLoader.load(
-//     '/models/Duck/glTF-Draco/Duck.gltf',
-//     (gltf) => {
-//     scene.add(gltf.scene)
-//     },)
+    // Draco圧縮について。デフォルトファイルに比べて軽い。bufferデータ。
+    // 複数のファイルを読み込む必要があるので、そもそも軽いデータではドラコローダーを使う必要はない。メガバイトの重たいデータであれば使ったほうが良い。
+    // フリーズが起こる可能性。解凍する必要があるので重たいデータなら0.5秒ほどフリーズすることがあります。2秒ロードするのか0.5秒フリーズするのかどちらが良いかはその時による。
+gltfLoader.load(
+    '/models/Duck/glTF-Draco/Duck.gltf',
+    (gltf) => {
+    scene.add(gltf.scene)
+    },)
 
 
 // キツネ
 // tick関数でmixerを使用して画面を更新したいが、constで宣言するとスコープの問題で呼び出せないので更新できるletで宣言する
-let mixer = null
-gltfLoader.load(
-    '/models/Fox/glTF/Fox.gltf',
-    (gltf) => {
+// let mixer = null
+// gltfLoader.load(
+//     '/models/Fox/glTF/Fox.gltf',
+//     (gltf) => {
 
-        mixer = new THREE.AnimationMixer(gltf.scene)
-        // 配列の番号を変えれば用意されたアニメーション内で違う動きをすることもできる。
-        const action = mixer.clipAction(gltf.animations[0])
-        action.play()
-    //スケールサイズの変更
-    gltf.scene.scale.set(0.025, 0.025, 0.025)
-    scene.add(gltf.scene)
-    },)
+//         mixer = new THREE.AnimationMixer(gltf.scene)
+//         // 配列の番号を変えれば用意されたアニメーション内で違う動きをすることもできる。
+//         const action = mixer.clipAction(gltf.animations[0])
+//         action.play()
+//     //スケールサイズの変更
+//     gltf.scene.scale.set(0.025, 0.025, 0.025)
+//     scene.add(gltf.scene)
+//     },)
 
 /**
  * Floor
@@ -182,9 +182,9 @@ const tick = () =>
     previousTime = elapsedTime
 
     // Update mixer モデルを読み込む時間があるのでif文で分岐させる
-    if(mixer !== null){
-        mixer.update(deltaTime)
-    }
+    // if(mixer !== null){
+    //     mixer.update(deltaTime)
+    // }
 
     // Update controls
     controls.update()

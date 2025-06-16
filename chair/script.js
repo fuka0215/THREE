@@ -110,18 +110,8 @@ scene.add(plane)
   err => console.error("SVGテクスチャ読み込みエラー", err)
 )
 
-// // Material
-// const material = new THREE.MeshStandardMaterial()
-// material.roughness = 0.4
-// material.color = new THREE.Color(0xff0000)
-
-// // Objects
-// const cube = new THREE.Mesh(
-//     new THREE.BoxGeometry(0.75, 0.75, 0.75),
-//     material
-// )
-// cube.position.y = 0.75 / 2
-// scene.add(cube)
+// 木目にしたいけどできない〜
+// const doorColorTexture = textureLoader.load('/Poligon/2K/Wood.jpg')
 
 const group = new THREE.Group()
 scene.add(group)
@@ -129,43 +119,40 @@ scene.add(group)
 // マテリアル
 const fabricMat = new THREE.MeshPhysicalMaterial({
   color: 0x90ee90,
-  roughness: 0.6,
-  metalness: 0,
-  sheen: 1.0,              // 布っぽい微光沢
-  sheenRoughness: 0.3
 });
 const woodMat = new THREE.MeshPhysicalMaterial({
   color: 0x593a25,
   roughness: 0.7,
   metalness: 0.1,
   clearcoat: 0.2,
-  clearcoatRoughness: 0.4
+  clearcoatRoughness: 0.4,
+  // map: doorColorTexture,
 });
 
 // 座面
-// const seat = new THREE.Mesh(
-//   new RoundedBoxGeometry(1.6, 0.4, 0.7, 8, 4, 2),
-//   fabricMat
-// );
-// seat.position.y = 0.8;
-// group.add(seat);
+const seat = new THREE.Mesh(
+  new THREE.BoxGeometry(1.3, 0.4, 0.7, 8, 4, 2),
+  fabricMat,
+);
+seat.position.y = 0.8;
+group.add(seat);
 
 // 背もたれ
-// const back = new THREE.Mesh(
-//   new RoundedBoxGeometry(1.2, 0.3, 0.4, 8, 4, 2),
-//   fabricMat
-// );
-// back.position.set(0, 1.4, -0.15);
-// back.rotation.x = -0.2;
-// group.add(back);
+const back = new THREE.Mesh(
+  new THREE.BoxGeometry(1.3, 0.6, 0.1, 8, 4, 2),
+  fabricMat,
+);
+back.position.set(0, 1.2, -0.35);
+back.rotation.x = -0.2;
+group.add(back);
 
 // 脚（4本）
-const legGeo = new THREE.CylinderGeometry(0.05, 0.05, 1.2, 16);
+const legGeo = new THREE.CylinderGeometry(0.05, 0.05, 1, 16);
 const legPositions = [
-  [ 0.6, 0.4,  0.3],
-  [-0.75, 0.4,  0.3],
-  [ 0.75, 0.4, -0.3],
-  [-0.75, 0.4, -0.3],
+  [ 0.5, 0.4,  0.3],
+  [-0.5, 0.4,  0.3],
+  [ 0.5, 0.4, -0.3],
+  [-0.5, 0.4, -0.3],
 ];
 legPositions.forEach(p => {
   const leg = new THREE.Mesh(legGeo, woodMat);
