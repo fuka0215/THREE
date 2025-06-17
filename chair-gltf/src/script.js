@@ -124,19 +124,81 @@ const gltfLoader = new GLTFLoader()
 // 上でドラコローダーを用意したらここにセットしてあげるだけで良い
 gltfLoader.setDRACOLoader(dracoLoader)
 
+
+
+
 // 椅子
 gltfLoader.load(
     '/models/ChairDamaskPurplegold/glTF/ChairDamaskPurplegold.gltf',
-
       (gltf) => {
     const root = gltf.scene;
     root.scale.set(3, 3, 3);
 
+  // // Mesh.nameを特定するためのコンソールログ
+  gltf.scene.traverse(obj => {
+    if (obj.isMesh) console.log(obj.name, obj);
+  });
+
+  //   const seatMesh = root.getObjectByName('oval-tufted-chair_seat-fabric');
+  //     if (seatMesh && seatMesh.isMesh) {
+  //   //   // 古いマテリアルは破棄
+  //         const oldMat = seatMesh.material;
+  //     if (Array.isArray(oldMat)) {
+  //       oldMat.forEach(mat => mat.dispose());
+  //     } else {
+  //       oldMat.dispose();
+  //     }
+
+  //       const newMat = new THREE.MeshStandardMaterial({
+  //       color: 0x156289,
+  //       metalness: 0.5,
+  //       roughness: 0.4,
+  //     });
+  //     seatMesh.material = newMat
+  //     scene.add(root)
+  // }
+
+
+  const seatNames = [
+    'oval-tufted-chair_seat-panel',
+    'oval-tufted-chair_seat-fabric',
+    'oval-tufted-chair_seat-buttons',
+    'oval-tufted-chair_seat-welt',
+  ];
+
+  const newSeatMat = new THREE.MeshStandardMaterial({
+    color: 0x156289,
+    metalness: 0.5,
+    roughness: 0.4,
+  });
+
+  seatNames.forEach(name => {
+    const mesh = root.getObjectByName(name);
+    if (mesh && mesh.isMesh) {
+      // 古いマテリアル破棄
+      if (Array.isArray(mesh.material)) {
+        mesh.material.forEach(m => m.dispose());
+      } else {
+        mesh.material.dispose();
+      }
+      // 新しいマテリアルをセット
+      mesh.material = newSeatMat;
+    } else {
+      console.warn(`Mesh "${name}" が見つかりませんでした`);
+    }
+  });
+
+  scene.add(root);
+
+
+
+
+
     // シーンに追加する前に traverse でマテリアルを変更
-    root.traverse((child) => {
-      if (child.isMesh) {
+    // root.traverse((child) => {
+      // if (child.isMesh) {
         // 色を赤にする例 色を被せる感じになる。
-        child.material.color.set(0xff0000);
+        // child.material.color.set(0xff0000);
 
         // 透明度や透明設定も可能
         // child.material.transparent = true;
@@ -145,17 +207,43 @@ gltfLoader.load(
         // 金属感を追加したいなら
         // child.material.metalness = 0.9;
         // child.material.roughness = 0.1;
-      }
-    });
+    //   }
+    // });
+    // scene.add(root);
 
-    scene.add(root);
+    // root.traverse((child) => {
+    //   if (!child.isMesh) return;
+
+
+    
+
+    //   // 1) 古いマテリアルを破棄してメモリをクリア
+    //   //    ※ マテリアルが配列の場合にも対応
+    //   const oldMat = child.material;
+    //   if (Array.isArray(oldMat)) {
+      //     oldMat.forEach(mat => mat.dispose());
+      //   } else {
+        //     oldMat.dispose();
+        //   }
+        
+        //   // 2) 新しいマテリアルを生成
+        //   const newMat = new THREE.MeshStandardMaterial({
+          //     color: 0x156289,
+          //     metalness: 0.5,
+          //     roughness: 0.4,
+          //   });
+          
+          //   // 3) メッシュにセットし直す
+          //   child.material = newMat;
+          // });
+          
+          // scene.add(root);
   }
 
     // (gltf) => {
     //   gltf.scene.scale.set(3, 3, 3)
     //   scene.add(gltf.scene)
     // },
-  
   )
 
 /**
