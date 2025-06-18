@@ -22,10 +22,12 @@ dl.position.set(5, 10, 7);
 scene.add(dl);
 
 const loader = new SVGLoader()
+const texLoader = new THREE.TextureLoader();
 
 // 2. SVG を読み込む
 loader.load(
-  './static/WALL-2nd.svg',
+  // './static/WALL-2nd.svg',
+  './static/WALL.svg',
   // './static/CS900BR_G308159_D0.svg',
   (data) => {
     const paths = data.paths;
@@ -36,7 +38,6 @@ loader.load(
       const color = new THREE.Color(path.color);
         // 4. Shape 配列を生成
         const shapes = SVGLoader.createShapes(path);
-        console.log(shapes)
 
         shapes.map((shape) => {
           // 5. 押し出しジオメトリを作成
@@ -67,31 +68,6 @@ loader.load(
 
     // シーンに追加
     scene.add(group);
-
-    // loader.load のコールバック内、壁 group の後あたりに追加
-const floorMat = new THREE.MeshStandardMaterial({
-  map: texLoader.load('./static/Wood.jpg'),
-  side: THREE.DoubleSide
-});
-const floorGroup = new THREE.Group();
-
-paths.forEach((path) => {
-  const shapes = SVGLoader.createShapes(path);
-  shapes.forEach((shape) => {
-    // ShapeGeometry で 2D→3D に
-    const geo = new THREE.ShapeGeometry(shape);
-    // 回転・スケールは壁と同じ変換を
-    geo.rotateX(- Math.PI/2);
-    geo.scale(0.05, 0.05, 0.05);
-
-    const mesh = new THREE.Mesh(geo, floorMat);
-    mesh.position.set(15, 0.01, 13);  // 壁と同じ位置に，少しだけ浮かせる
-    floorGroup.add(mesh);
-  });
-});
-
-scene.add(floorGroup);
-
   },
   undefined,
   (error) => {
@@ -99,17 +75,14 @@ scene.add(floorGroup);
   }
 );
 
-
-
-// 床 
-const texLoader = new THREE.TextureLoader();
+// 床
 const floorMat  = new THREE.MeshStandardMaterial({
   map: texLoader.load('./static/Wood.jpg')
 });
 const floorGeo = new THREE.PlaneGeometry(20, 20);
 const floor = new THREE.Mesh(floorGeo, floorMat);
 floor.rotation.x = -Math.PI/2;
-// scene.add(floor);
+scene.add(floor);
 
 /////// 壁（サンプル） ///////
 function makeWall(width, height, depth, pos, rotY = 0) {
@@ -118,7 +91,7 @@ function makeWall(width, height, depth, pos, rotY = 0) {
   const wall = new THREE.Mesh(geo, mat);
   wall.position.set(pos.x, pos.y, pos.z);
   wall.rotation.y = rotY;
-  // scene.add(wall);
+  scene.add(wall);
 }
 // 例：奥の壁
 makeWall(20, 3, 0.1, { x: 0, y: 1.5, z: -10 });
