@@ -139,6 +139,7 @@ gltfLoader.load(
     if (obj.isMesh) console.log(obj.name, obj);
   });
 
+  // 一つのMeshに対して変更をしたい時。
   //   const seatMesh = root.getObjectByName('oval-tufted-chair_seat-fabric');
   //     if (seatMesh && seatMesh.isMesh) {
   //   //   // 古いマテリアルは破棄
@@ -158,7 +159,7 @@ gltfLoader.load(
   //     scene.add(root)
   // }
 
-
+// 複数のMeshに対してマテリアルを変更したい場合、Mesh.nameを配列で管理して繰り返し処理で回す。
   const seatNames = [
     'oval-tufted-chair_seat-panel',
     'oval-tufted-chair_seat-fabric',
