@@ -232,7 +232,6 @@ gltfLoader.load(
   draggableObjects.push(root);
 })
 
-
 gltfLoader.load(
     '/models/ｷｯﾁﾝR01.gltf',
       (gltf) => {
@@ -300,6 +299,7 @@ function onPointerUp() {
     controls.enabled = true;
   }
 }
+
 
 /**
  * Animate
